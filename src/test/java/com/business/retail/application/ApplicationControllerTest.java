@@ -1,6 +1,7 @@
 package com.business.retail.application;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
+
+import com.business.retail.application.domain.Shop;
+import com.business.retail.application.domain.ShopAddress;
+import com.business.retail.application.services.ApplicationService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ApplicationRunner.class)
@@ -50,9 +55,22 @@ public class ApplicationControllerTest {
 
 	@Test
 	public void testCustomerIndex() throws Exception {
-		ResponseEntity<String> response = template.exchange(baseUrl + "/customer",
-				HttpMethod.GET, new HttpEntity(headers), String.class);
-		assertEquals(ApplicationController.CUSTOMER_INDEX_MSG, response.getBody());
+		ResponseEntity<String> response = template.exchange(baseUrl
+				+ "/customer", HttpMethod.GET, new HttpEntity(headers),
+				String.class);
+		assertEquals(ApplicationController.CUSTOMER_INDEX_MSG,
+				response.getBody());
 	}
 
+	@Test
+	public void testAddShop() throws Exception {
+		String shopName = "Tesco";
+		ShopAddress address = new ShopAddress("209", "SE13 7PY");
+		Shop shop = new Shop(shopName, address, null, null);
+		ResponseEntity<Shop> response = template.exchange(baseUrl
+				+ "/admin/addShop", HttpMethod.POST, new HttpEntity<Shop>(shop,
+				headers), Shop.class);
+		Shop expectedShop = new Shop(shopName, address, new Double(51.4656697), new Double(-0.0106995));
+		assertTrue(expectedShop.equals(response.getBody()));
+	}
 }
