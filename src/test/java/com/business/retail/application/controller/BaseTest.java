@@ -1,4 +1,4 @@
-package com.business.retail.application;
+package com.business.retail.application.controller;
 
 import org.junit.After;
 import org.junit.Before;

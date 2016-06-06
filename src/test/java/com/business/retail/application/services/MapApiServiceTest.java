@@ -18,10 +18,15 @@ import com.business.retail.application.domain.Shop;
 import com.business.retail.application.domain.ShopAddress;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GeocodeApiServiceTest {
+public class MapApiServiceTest {
+
+	private static final String testApiKey = "AIzaSyButDkiIyal_JAtixC-hRjxU1JfooFjIKE";
+	
 	@InjectMocks
 	GeocodeApiService geocodeApiService;
-	private static final String testApiKey = "AIzaSyButDkiIyal_JAtixC-hRjxU1JfooFjIKE";
+
+	@InjectMocks
+	DistanceMatrixApiService distanceMatrixApiService;
 
 	@Mock
 	Environment env;
@@ -61,7 +66,7 @@ public class GeocodeApiServiceTest {
 		Double custLat = new Double(51.46739299999999);
 		Double custLong = new Double(-0.0222004);
 		
-		List<Double> distancesToCustLoc = geocodeApiService
+		List<Double> distancesToCustLoc = distanceMatrixApiService
 				.getDistanceInMiles(allShops, custLat, custLong);
 		
 		assertTrue(0.7==distancesToCustLoc.get(0).doubleValue());

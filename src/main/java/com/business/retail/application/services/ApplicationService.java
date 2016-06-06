@@ -2,7 +2,6 @@ package com.business.retail.application.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -20,6 +19,8 @@ public class ApplicationService {
 	@Autowired
 	private GeocodeApiService geocodeApiService;
 	@Autowired
+	private DistanceMatrixApiService distanceMatrixApiService;
+	@Autowired
 	Environment env;
 
 	public Shop addShop(Shop shop) {
@@ -27,7 +28,7 @@ public class ApplicationService {
 		dao.addShop(shopWithLatLong);
 		return shopWithLatLong;
 	}
-	
+
 	public List<Shop> getShops() {
 		return dao.getShops();
 	}
@@ -35,11 +36,14 @@ public class ApplicationService {
 	public List<Shop> findNearestShops(String custLat, String custLong) {
 		List<Shop> nearestShops = new ArrayList<Shop>();
 		List<Shop> allShops = dao.getShops();
-		List<Double> distanceToCustLoc = geocodeApiService.getDistanceInMiles(allShops, new Double(custLat), new Double(custLong));
+		List<Double> distanceToCustLoc = distanceMatrixApiService
+				.getDistanceInMiles(allShops, new Double(custLat), new Double(
+						custLong));
 		Double radius = Double.parseDouble(env.getProperty(RADIUS_KEY_NAME));
-		
-		for(int i=0; i<allShops.size(); i++) {
-			if(distanceToCustLoc.get(i)>=0 && distanceToCustLoc.get(i)<=radius) {
+
+		for (int i = 0; i < allShops.size(); i++) {
+			if (distanceToCustLoc.get(i) >= 0
+					&& distanceToCustLoc.get(i) <= radius) {
 				nearestShops.add(allShops.get(i));
 			}
 		}

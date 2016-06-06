@@ -1,4 +1,4 @@
-package com.business.retail.application;
+package com.business.retail.application.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -16,6 +16,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.business.retail.application.ApplicationRunner;
+import com.business.retail.application.controller.ApplicationController;
 import com.business.retail.application.domain.Shop;
 import com.business.retail.application.domain.ShopAddress;
 
@@ -45,7 +47,7 @@ public class ApplicationControllerIT extends BaseTest {
 		ShopAddress address = new ShopAddress("209 Lewisham Road", "SE13 7PY");
 		Shop shop = new Shop(shopName, address, null, null);
 		ResponseEntity<Shop> response = hitAddShopUrl(shop);
-		Shop expectedShop = new Shop(shopName, address,  new Double(51.4664441),
+		Shop expectedShop = new Shop(shopName, address, new Double(51.4664441),
 				new Double(-0.0124755));
 		assertTrue(expectedShop.equals(response.getBody()));
 		assertTrue(service.getShops().size() == 1);
@@ -57,8 +59,8 @@ public class ApplicationControllerIT extends BaseTest {
 		ShopAddress address1 = new ShopAddress("209 Lewisham Road", "SE13 7PY");
 		Shop shop1 = new Shop(shopName, address1, null, null);
 		ResponseEntity<Shop> response1 = hitAddShopUrl(shop1);
-		Shop expectedShop1 = new Shop(shopName, address1, new Double(51.4664441),
-				new Double(-0.0124755));
+		Shop expectedShop1 = new Shop(shopName, address1,
+				new Double(51.4664441), new Double(-0.0124755));
 		assertTrue(expectedShop1.equals(response1.getBody()));
 		assertTrue(service.getShops().size() == 1);
 
@@ -72,7 +74,8 @@ public class ApplicationControllerIT extends BaseTest {
 
 		Double custLat = new Double(51.46739299999999);
 		Double custLong = new Double(-0.0222004);
-		ResponseEntity<Shop[]> response = hitFindNearestShopsUrl(custLat, custLong);
+		ResponseEntity<Shop[]> response = hitFindNearestShopsUrl(custLat,
+				custLong);
 
 		Shop[] nearestShopsArr = response.getBody();
 		List<Shop> nearestShops = Arrays.asList(nearestShopsArr);
