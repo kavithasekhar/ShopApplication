@@ -1,4 +1,4 @@
-package com.business.retail.application.controller;
+package com.business.retail.application;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,6 +14,12 @@ import org.springframework.web.client.RestTemplate;
 import com.business.retail.application.domain.Shop;
 import com.business.retail.application.services.ApplicationService;
 
+/**
+ * Common code for controller testing
+ * 
+ * @author Kavitha
+ *
+ */
 public class BaseTest {
 	protected String baseUrl;
 	protected RestTemplate template = new TestRestTemplate();

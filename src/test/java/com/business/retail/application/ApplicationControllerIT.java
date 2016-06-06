@@ -1,4 +1,4 @@
-package com.business.retail.application.controller;
+package com.business.retail.application;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -16,11 +16,17 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.business.retail.application.ApplicationController;
 import com.business.retail.application.ApplicationRunner;
-import com.business.retail.application.controller.ApplicationController;
 import com.business.retail.application.domain.Shop;
 import com.business.retail.application.domain.ShopAddress;
 
+/**
+ * Integration Test for positive scenarios
+ * 
+ * @author Kavitha
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ApplicationRunner.class)
 @WebIntegrationTest

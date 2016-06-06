@@ -10,6 +10,12 @@ import org.springframework.stereotype.Service;
 import com.business.retail.application.domain.Shop;
 import com.business.retail.application.geoservice.enums.StatusCode;
 
+/**
+ * Service that access google's distance matrix api service
+ * 
+ * @author Kavitha
+ *
+ */
 @Service
 public class DistanceMatrixApiService extends MapApiService {
 

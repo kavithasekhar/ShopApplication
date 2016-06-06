@@ -17,8 +17,15 @@ import org.springframework.core.env.Environment;
 import com.business.retail.application.domain.Shop;
 import com.business.retail.application.domain.ShopAddress;
 
+/**
+ * 
+ * Integration Test covering the google api json result parsing
+ * 
+ * @author Kavitha
+ *
+ */
 @RunWith(MockitoJUnitRunner.class)
-public class MapApiServiceTest {
+public class MapApiServiceIT {
 
 	private static final String testApiKey = "AIzaSyButDkiIyal_JAtixC-hRjxU1JfooFjIKE";
 	

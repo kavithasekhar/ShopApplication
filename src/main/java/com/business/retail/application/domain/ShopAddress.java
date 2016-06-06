@@ -3,6 +3,12 @@ package com.business.retail.application.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Domain Object for Shop Address
+ * 
+ * @author Kavitha
+ *
+ */
 public class ShopAddress {
 	private String number;
 	private String postCode;

@@ -10,6 +10,13 @@ import org.springframework.stereotype.Service;
 import com.business.retail.application.dao.ShopDao;
 import com.business.retail.application.domain.Shop;
 
+/**
+ * Main application service class which accesses other service/dao classes to
+ * perform business functions
+ * 
+ * @author Kavitha
+ *
+ */
 @Service
 public class ApplicationService {
 

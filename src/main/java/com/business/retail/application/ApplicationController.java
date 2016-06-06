@@ -1,4 +1,4 @@
-package com.business.retail.application.controller;
+package com.business.retail.application;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,6 +25,12 @@ import com.business.retail.application.exceptions.InvalidRequestException;
 import com.business.retail.application.exceptions.MapLocationNotFoundException;
 import com.business.retail.application.services.ApplicationService;
 
+/**
+ * REST controller for adding shops and finding nearest shops to customer location
+ * 
+ * @author Kavitha
+ *
+ */
 @Controller
 @RequestMapping("/retailshops")
 public class ApplicationController {

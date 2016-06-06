@@ -7,6 +7,12 @@ import org.springframework.stereotype.Component;
 
 import com.business.retail.application.domain.Shop;
 
+/**
+ * In-memory form of persistence implementation
+ * 
+ * @author Kavitha
+ *
+ */
 @Component
 public class InMemoryDaoImpl implements ShopDao {
 	private List<Shop> shops = new CopyOnWriteArrayList<Shop>();

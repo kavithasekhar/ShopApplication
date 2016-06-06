@@ -1,5 +1,11 @@
 package com.business.retail.application.exceptions;
 
+/**
+ * Generic Application Exception
+ * 
+ * @author Kavitha
+ *
+ */
 public class ApplicationException extends RuntimeException {
 	String message;
 	

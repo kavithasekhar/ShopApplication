@@ -5,6 +5,12 @@ import org.springframework.stereotype.Service;
 
 import com.business.retail.application.domain.Shop;
 
+/**
+ * Service that access google's geocoding api service. 
+ * 
+ * @author Kavitha
+ *
+ */
 @Service
 public class GeocodeApiService extends MapApiService {
 

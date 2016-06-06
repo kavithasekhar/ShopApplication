@@ -1,4 +1,4 @@
-package com.business.retail.application.controller;
+package com.business.retail.application;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -20,6 +20,13 @@ import com.business.retail.application.ApplicationRunner;
 import com.business.retail.application.domain.Shop;
 import com.business.retail.application.domain.ShopAddress;
 
+/**
+ * 
+ * Integration Tests for exception scenarios
+ * 
+ * @author Kavitha
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ApplicationRunner.class)
 @WebIntegrationTest
