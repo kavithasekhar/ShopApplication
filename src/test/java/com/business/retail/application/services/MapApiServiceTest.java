@@ -25,9 +25,9 @@ import com.business.retail.application.domain.ShopAddress;
  *
  */
 @RunWith(MockitoJUnitRunner.class)
-public class MapApiServiceIT {
+public class MapApiServiceTest {
 
-	private static final String testApiKey = "AIzaSyButDkiIyal_JAtixC-hRjxU1JfooFjIKE";
+	private static final String testApiKey = "AIzaSyDh0Mk09HWROLsphUuCKd8_BDxRHTBYgkc";
 	
 	@InjectMocks
 	GeocodeApiService geocodeApiService;

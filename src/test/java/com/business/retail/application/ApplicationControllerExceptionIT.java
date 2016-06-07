@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.business.retail.application.ApplicationRunner;
 import com.business.retail.application.domain.Shop;
 import com.business.retail.application.domain.ShopAddress;
 
@@ -32,7 +33,7 @@ import com.business.retail.application.domain.ShopAddress;
 @WebIntegrationTest
 public class ApplicationControllerExceptionIT extends BaseTest {
 	@Test
-	public void testAddShop_WithInvalidAddress() throws Exception {
+	public void testAddShop_WithInvalidAddress() {
 		String shopName = "Tesco";
 		ShopAddress address = new ShopAddress("22", "SE13 7LL");
 		Shop shop = new Shop(shopName, address, null, null);
@@ -40,17 +41,25 @@ public class ApplicationControllerExceptionIT extends BaseTest {
 		assertTrue(HttpStatus.BAD_REQUEST.equals(response.getStatusCode()));
 		assertTrue(service.getShops().size() == 0);
 	}
-	
+
 	@Test
-	public void testFindNearestShops_WithNoShopsInDB() throws Exception {
-		//No Shops in Database
+	public void testFindNearestShops_WithNoShopsInDB() {
+		// No Shops in Database
 		Double custLat = new Double(51.46739299999999);
 		Double custLong = new Double(-0.0222004);
-		ResponseEntity<Shop[]> response = hitFindNearestShopsUrl(custLat, custLong);
+		ResponseEntity<Shop[]> response = hitFindNearestShopsUrl(custLat,
+				custLong);
 
 		Shop[] nearestShopsArr = response.getBody();
 		List<Shop> nearestShops = Arrays.asList(nearestShopsArr);
 		assertNotNull(nearestShops);
 		assertTrue(0 == nearestShops.size());
+	}
+
+	@Test
+	public void testAdminIndexWithUserCredentials() {
+		ResponseEntity<String> response = template.exchange(baseUrl + "/admin",
+				HttpMethod.GET, new HttpEntity(userHeaders), String.class);
+		assertTrue(HttpStatus.FORBIDDEN.equals(response.getStatusCode()));
 	}
 }

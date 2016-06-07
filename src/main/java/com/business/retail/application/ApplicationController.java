@@ -26,7 +26,8 @@ import com.business.retail.application.exceptions.MapLocationNotFoundException;
 import com.business.retail.application.services.ApplicationService;
 
 /**
- * REST controller for adding shops and finding nearest shops to customer location
+ * REST controller for adding shops and finding nearest shops to customer
+ * location
  * 
  * @author Kavitha
  *
@@ -40,47 +41,45 @@ public class ApplicationController {
 	private ApplicationService service;
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<String> admin_index() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		ResponseEntity<String> response = new ResponseEntity<String>(
-				ADMIN_INDEX_MSG, headers, HttpStatus.OK);
-		return response;
+	public @ResponseBody String admin_index() {
+		service.ensureAdmin();
+		return ADMIN_INDEX_MSG;
 	}
 
 	@RequestMapping(value = "/customer", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<String> customer_index() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		ResponseEntity<String> response = new ResponseEntity<String>(
-				CUSTOMER_INDEX_MSG, headers, HttpStatus.OK);
-		return response;
+	public @ResponseBody String customer_index() {
+		return CUSTOMER_INDEX_MSG;
 	}
 
 	@RequestMapping(value = "/admin/addShop", method = RequestMethod.POST)
 	public @ResponseBody Shop addShop(@RequestBody Shop shop) {
+		service.ensureAdmin();
 		return service.addShop(shop);
 	}
 
 	@RequestMapping(value = "/customer/findNearestShops", method = RequestMethod.GET)
 	public @ResponseBody List<Shop> findNearestShops(
-			@RequestParam(value = "custLat") String custLat, @RequestParam(value="custLong") String custLong) {
+			@RequestParam(value = "custLat") String custLat,
+			@RequestParam(value = "custLong") String custLong) {
 		return service.findNearestShops(custLat, custLong);
 	}
-	
+
 	@ExceptionHandler(ApplicationException.class)
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public void handleGenericExceptions(HttpServletResponse response, ApplicationException exception) throws
-            IOException {
-		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, exception.toString());
-    }
-	
-	@ExceptionHandler({InvalidRequestException.class,MapLocationNotFoundException.class})
+	public void handleGenericExceptions(HttpServletResponse response,
+			ApplicationException exception) throws IOException {
+		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+				exception.toString());
+	}
+
+	@ExceptionHandler({ InvalidRequestException.class,
+			MapLocationNotFoundException.class })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public void handleBadRequests(HttpServletResponse response, ApplicationException exception) throws
-            IOException {
-		response.sendError(HttpServletResponse.SC_BAD_REQUEST, exception.toString());
-    }
+	public void handleBadRequests(HttpServletResponse response,
+			ApplicationException exception) throws IOException {
+		response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+				exception.toString());
+	}
 }

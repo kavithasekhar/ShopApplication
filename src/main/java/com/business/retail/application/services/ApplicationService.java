@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.business.retail.application.dao.ShopDao;
@@ -55,6 +56,11 @@ public class ApplicationService {
 			}
 		}
 		return nearestShops;
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	public boolean ensureAdmin() {
+		return true;
 	}
 
 }

@@ -16,8 +16,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.business.retail.application.ApplicationController;
-import com.business.retail.application.ApplicationRunner;
 import com.business.retail.application.domain.Shop;
 import com.business.retail.application.domain.ShopAddress;
 
@@ -32,23 +30,23 @@ import com.business.retail.application.domain.ShopAddress;
 @WebIntegrationTest
 public class ApplicationControllerIT extends BaseTest {
 	@Test
-	public void testAdminIndex() throws Exception {
+	public void testAdminIndex() {
 		ResponseEntity<String> response = template.exchange(baseUrl + "/admin",
-				HttpMethod.GET, new HttpEntity(headers), String.class);
+				HttpMethod.GET, new HttpEntity(adminHeaders), String.class);
 		assertEquals(ApplicationController.ADMIN_INDEX_MSG, response.getBody());
 	}
 
 	@Test
-	public void testCustomerIndex() throws Exception {
+	public void testCustomerIndex() {
 		ResponseEntity<String> response = template.exchange(baseUrl
-				+ "/customer", HttpMethod.GET, new HttpEntity(headers),
+				+ "/customer", HttpMethod.GET, new HttpEntity(userHeaders),
 				String.class);
 		assertEquals(ApplicationController.CUSTOMER_INDEX_MSG,
 				response.getBody());
 	}
 
 	@Test
-	public void testAddShop() throws Exception {
+	public void testAddShop() {
 		String shopName = "Tesco";
 		ShopAddress address = new ShopAddress("209 Lewisham Road", "SE13 7PY");
 		Shop shop = new Shop(shopName, address, null, null);
@@ -60,7 +58,7 @@ public class ApplicationControllerIT extends BaseTest {
 	}
 
 	@Test
-	public void testFindNearestShops() throws Exception {
+	public void testFindNearestShops() {
 		String shopName = "Tesco";
 		ShopAddress address1 = new ShopAddress("209 Lewisham Road", "SE13 7PY");
 		Shop shop1 = new Shop(shopName, address1, null, null);
