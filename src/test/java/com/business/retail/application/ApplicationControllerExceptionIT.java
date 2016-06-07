@@ -62,4 +62,18 @@ public class ApplicationControllerExceptionIT extends BaseTest {
 				HttpMethod.GET, new HttpEntity(userHeaders), String.class);
 		assertTrue(HttpStatus.FORBIDDEN.equals(response.getStatusCode()));
 	}
+	
+	@Test
+	public void testAddingSameShopMultipleTimes() {
+		String shopName = "Tesco";
+		ShopAddress address = new ShopAddress("23 Falcon Road", "SW11 2PJ");
+		Shop shop = new Shop(shopName, address, null, null);
+		ResponseEntity<Shop> response1 = hitAddShopUrl(shop);
+		assertTrue(HttpStatus.OK.equals(response1.getStatusCode()));
+		assertTrue(service.getShops().size() == 1);
+		
+		ResponseEntity<Shop> response2 = hitAddShopUrl(shop);
+		assertTrue(HttpStatus.CONFLICT.equals(response2.getStatusCode()));
+		assertTrue(service.getShops().size() == 1);
+	}
 }

@@ -6,10 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.business.retail.application.domain.Shop;
 import com.business.retail.application.exceptions.ApplicationException;
+import com.business.retail.application.exceptions.DuplicateException;
 import com.business.retail.application.exceptions.InvalidRequestException;
 import com.business.retail.application.exceptions.MapLocationNotFoundException;
 import com.business.retail.application.services.ApplicationService;
@@ -80,6 +78,15 @@ public class ApplicationController {
 	public void handleBadRequests(HttpServletResponse response,
 			ApplicationException exception) throws IOException {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+				exception.toString());
+	}
+
+	@ExceptionHandler({ DuplicateException.class })
+	@ResponseBody
+	@ResponseStatus(value = HttpStatus.CONFLICT)
+	public void handleDuplicateRequests(HttpServletResponse response,
+			ApplicationException exception) throws IOException {
+		response.sendError(HttpServletResponse.SC_CONFLICT,
 				exception.toString());
 	}
 }
