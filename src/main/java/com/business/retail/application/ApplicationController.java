@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,15 +54,16 @@ public class ApplicationController {
 	}
 
 	@RequestMapping(value = "/admin/addShop", method = RequestMethod.POST)
-	public @ResponseBody Shop addShop(@RequestBody Shop shop) {
+	public @ResponseBody Shop addShop(@RequestBody @Valid Shop shop) {
 		service.ensureAdmin();
 		return service.addShop(shop);
 	}
 
+	@Validated
 	@RequestMapping(value = "/customer/findNearestShops", method = RequestMethod.GET)
 	public @ResponseBody List<Shop> findNearestShops(
-			@RequestParam(value = "custLat") String custLat,
-			@RequestParam(value = "custLong") String custLong) {
+			@RequestParam(value = "custLat", required = true) Double custLat,
+			@RequestParam(value = "custLong", required = true) Double custLong) {
 		return service.findNearestShops(custLat, custLong);
 	}
 
@@ -72,7 +77,9 @@ public class ApplicationController {
 	}
 
 	@ExceptionHandler({ InvalidRequestException.class,
-			MapLocationNotFoundException.class })
+			MapLocationNotFoundException.class,
+			ConstraintViolationException.class,
+			MethodArgumentNotValidException.class })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public void handleBadRequests(HttpServletResponse response,

@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.business.retail.application.exceptions.ApplicationException;
@@ -23,41 +24,42 @@ import com.business.retail.application.geoservice.enums.StatusCode;
  * @author Kavitha
  *
  */
+@Service
 public class MapApiService {
 	protected static final String API_KEY_NAME = "google.geo.api.key";
+	public static final String MAP_LOCATION_ERROR_KEY = "map_location_not_found.error_msg";
+	public static final String INVALID_REQUEST_ERROR_KEY = "invalid_request.error_msg";
+	public static final String ALL_OTHER_ERROR_KEY = "all_others.error_msg";
 	private static final Logger LOGGER = Logger.getLogger(MapApiService.class
 			.getName());
 	protected RestTemplate template = new RestTemplate();
 	@Autowired
 	protected Environment env;
 
-	protected void checkStatus(JSONObject jsonObj) {
+    void checkStatus(JSONObject jsonObj) {
 		String status = jsonObj.getString("status");
+		String errorMessage = null; 
 		if (StatusCode.ZERO_RESULTS.name().equals(status)) {
 			throw new MapLocationNotFoundException(
-					"Given address cannot be located on Google Maps. Please check the inputs!");
+					env.getProperty(MAP_LOCATION_ERROR_KEY));
 		}
 		if (StatusCode.INVALID_REQUEST.name().equals(status)) {
-			throw new InvalidRequestException(
-					"Input Request url is invalid. Please check!");
-		}
-		if (StatusCode.REQUEST_DENIED.name().equals(status)) {
-			LOGGER.log(Level.SEVERE,
-					"Google Geocoding API key may not be valid anymore. Please check!");
-		}
-		if (StatusCode.MAX_ELEMENTS_EXCEEDED.name().equals(status)
-				|| StatusCode.OVER_QUERY_LIMIT.name().equals(status)) {
-			LOGGER.log(Level.SEVERE,
-					"Google API query limits may have been exceeded. Please check!");
-		}
-		if (StatusCode.UNKNOWN_ERROR.name().equals(status)) {
-			LOGGER.log(Level.SEVERE,
-					"Unknown error. May be Google API is down!");
+			errorMessage = jsonObj.getString("error_message");
+			LOGGER.log(Level.SEVERE, errorMessage);
+			throw new InvalidRequestException(env.getProperty(INVALID_REQUEST_ERROR_KEY));
 		}
 		if (!StatusCode.OK.name().equals(status)) {
-			throw new ApplicationException(
-					"Failed to process your request. Please try again later");
+			errorMessage = jsonObj.getString("error_message");
+			LOGGER.log(Level.SEVERE, errorMessage);
+			throw new ApplicationException(env.getProperty(ALL_OTHER_ERROR_KEY));
 		}
 	}
 
+    RestTemplate getTemplate() {
+		return template;
+	}
+
+	Environment getEnv() {
+		return env;
+	}
 }

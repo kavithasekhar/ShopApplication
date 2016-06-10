@@ -1,5 +1,9 @@
 package com.business.retail.application.domain;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +14,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 public class ShopAddress {
+	@NotNull
+	@NotBlank
 	private String number;
+	@NotNull
+	@NotBlank
 	private String postCode;
 	
 	@JsonCreator

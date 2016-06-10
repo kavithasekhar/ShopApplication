@@ -56,12 +56,12 @@ public class ApplicationService {
 		return dao.getShops();
 	}
 
-	public List<Shop> findNearestShops(String custLat, String custLong) {
+	public List<Shop> findNearestShops(Double latitude, Double longitude) {
 		List<Shop> nearestShops = new ArrayList<Shop>();
+
 		List<Shop> allShops = dao.getShops();
 		List<Double> distanceToCustLoc = distanceMatrixApiService
-				.getDistanceInMiles(allShops, new Double(custLat), new Double(
-						custLong));
+				.getDistanceInMiles(allShops, latitude, longitude);
 		Double radius = Double.parseDouble(env.getProperty(RADIUS_KEY_NAME));
 
 		for (int i = 0; i < allShops.size(); i++) {
@@ -76,6 +76,15 @@ public class ApplicationService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean ensureAdmin() {
 		return true;
+	}
+
+	public void setGeocodeApiService(GeocodeApiService geocodeApiService) {
+		this.geocodeApiService = geocodeApiService;
+	}
+
+	public void setDistanceMatrixApiService(
+			DistanceMatrixApiService distanceMatrixApiService) {
+		this.distanceMatrixApiService = distanceMatrixApiService;
 	}
 
 }

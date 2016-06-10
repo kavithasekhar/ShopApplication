@@ -4,11 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpEntity;
@@ -29,6 +31,7 @@ import com.business.retail.application.domain.ShopAddress;
 @SpringApplicationConfiguration(ApplicationRunner.class)
 @WebIntegrationTest
 public class ApplicationControllerIT extends BaseTest {
+
 	@Test
 	public void testAdminIndex() {
 		ResponseEntity<String> response = template.exchange(baseUrl + "/admin",
@@ -49,10 +52,13 @@ public class ApplicationControllerIT extends BaseTest {
 	public void testAddShop() {
 		String shopName = "Tesco";
 		ShopAddress address = new ShopAddress("209 Lewisham Road", "SE13 7PY");
+		Shop expectedShop = new Shop(shopName, address, new Double(51),
+				new Double(-0.012));
+		Mockito.when(geocodeApiService.populateLatLong(Mockito.any(Shop.class)))
+				.thenReturn(expectedShop);
+
 		Shop shop = new Shop(shopName, address, null, null);
 		ResponseEntity<Shop> response = hitAddShopUrl(shop);
-		Shop expectedShop = new Shop(shopName, address, new Double(51.4664441),
-				new Double(-0.0124755));
 		assertTrue(expectedShop.equals(response.getBody()));
 		assertTrue(service.getShops().size() == 1);
 	}
@@ -61,23 +67,33 @@ public class ApplicationControllerIT extends BaseTest {
 	public void testFindNearestShops() {
 		String shopName = "Tesco";
 		ShopAddress address1 = new ShopAddress("209 Lewisham Road", "SE13 7PY");
-		Shop shop1 = new Shop(shopName, address1, null, null);
-		ResponseEntity<Shop> response1 = hitAddShopUrl(shop1);
 		Shop expectedShop1 = new Shop(shopName, address1,
 				new Double(51.4664441), new Double(-0.0124755));
+		Mockito.when(geocodeApiService.populateLatLong(Mockito.any(Shop.class)))
+				.thenReturn(expectedShop1);
+		Shop shop1 = new Shop(shopName, address1, null, null);
+		ResponseEntity<Shop> response1 = hitAddShopUrl(shop1);
 		assertTrue(expectedShop1.equals(response1.getBody()));
 		assertTrue(service.getShops().size() == 1);
 
 		ShopAddress address2 = new ShopAddress("23 Falcon Road", "SW11 2PJ");
-		Shop shop2 = new Shop(shopName, address2, null, null);
-		ResponseEntity<Shop> response2 = hitAddShopUrl(shop2);
 		Shop expectedShop2 = new Shop(shopName, address2,
 				new Double(51.4694035), new Double(-0.1711022));
+		Mockito.when(geocodeApiService.populateLatLong(Mockito.any(Shop.class)))
+				.thenReturn(expectedShop2);
+		Shop shop2 = new Shop(shopName, address2, null, null);
+		ResponseEntity<Shop> response2 = hitAddShopUrl(shop2);
 		assertTrue(expectedShop2.equals(response2.getBody()));
 		assertTrue(service.getShops().size() == 2);
 
-		Double custLat = new Double(51.46739299999999);
-		Double custLong = new Double(-0.0222004);
+		String custLat = "51.46739299999999";
+		String custLong = "-0.0222004";
+		List<Double> mockDistanceValues = new ArrayList<Double>(Arrays.asList(
+				0.7, 7.5));
+		Mockito.when(
+				distanceMatrixApiService.getDistanceInMiles(
+						Mockito.any(List.class), Mockito.anyDouble(),
+						Mockito.anyDouble())).thenReturn(mockDistanceValues);
 		ResponseEntity<Shop[]> response = hitFindNearestShopsUrl(custLat,
 				custLong);
 

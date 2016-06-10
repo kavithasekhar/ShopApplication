@@ -1,5 +1,10 @@
 package com.business.retail.application.domain;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +15,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 public class Shop {
+	@NotNull
+	@NotBlank
 	private String shopName;
+	@NotNull
+	@Valid
 	private ShopAddress shopAddress;
 	private Double shopLatitude;
 	private Double shopLongitude;
