@@ -1,0 +1,36 @@
+In this server api, 
+
+FUNCTIONAL AND NON-FUNCTIONAL ITEMS COVERED:
+Requested Business Functionality
+Basic HTTP Authentication using roles (ADMIN, USER)
+Input Validation
+Exception Handling (Captured edge cases and thrown relevant exception wherever appropriate)
+Logging
+Unit Tests (Used Mockito in Testing to avoid connecting to Google API)
+Integration Tests
+Handled Concurrency
+
+DESIGN AND DEVELOPMENT CHOICES:
+Composition over Inheritance
+Model View Controller
+Domain Driven Design
+Test Driven Development
+Used Google Geocoding API to get the location co-ordinates and 
+DistanceMatrix API to get the distances from single origin(customer location) to multiple destinations(Available Shops)
+Used CopyOnWriteArrayList for thread safe array list
+
+IMPROVEMENTS WHEN DEPLOYED TO PRODUCTION:
+Caching Feature
+Profile based configuration for different environments
+Database instead of In-memory structure for permanent storage
+Encrypting ApiKeys and Passwords OR storing them in the respective environment servers
+SSL - Connecting over HTTPS
+Decouple application properties from the deployable artifact, so that properties can be changed independent of the release artifact.
+
+
+Please Note:
+GIT was originally installed by another user in my laptop. I changed the git config user.name and user.email to mine 
+but still I wasn't able to do my first commit in my name. However, I was able to do the subsequent commits in my username.
+
+Thus, You will see a different username in the first GIT checkin - kalirajan. I added that another user as a collaborator 
+and pushed my first commit to remote repository. 
